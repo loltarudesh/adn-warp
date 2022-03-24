@@ -1,0 +1,67 @@
+name:                adn
+version:             0.1.0.0
+github:              "loltarudesh/adn-warp"
+license:             MIT
+author:              "Lorbam Oltarudesh"
+maintainer:          "lorbamOltarudesh@protonmail.com"
+copyright:           "2021 Lorbam Oltarudesh"
+
+extra-source-files:
+- README.md
+
+# Metadata used when publishing your package
+synopsis: Another Distributed Network
+category: Network
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/loltarudesh/adn-warp#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- array 
+- containers == 0.6.5.1 
+- bytestring == 0.10.12.0
+- binary == 0.8.8.0
+- lens == 4.19.2
+- mtl == 2.2.2
+- network == 3.1.1.1        
+- split == 0.2.3.4       
+- utf8-string == 1.0.2
+- exceptions == 0.10.4
+- time == 1.9.3
+- parsec == 3.1.14.0
+
+# for timers 
+- timers == 0.2.0.4
+- suspend == 0.2.0.0
+
+# for ADN.CLI
+- haskeline == 0.8.2
+
+# not all realy used: ADN.Core.Pipe.Chan 
+- stm == 2.5.0.1   
+- unagi-chan == 0.4.1.4
+
+# for ADN.Tun
+- unix == 2.7.2.2 # manage system handler
+- process == 1.6.13.2 # call shell commands
+
+# for argument parsing
+- optparse-applicative == 0.16.1.0
+
+library:
+  source-dirs: src
+
+executables:
+  adn-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - adn
+
