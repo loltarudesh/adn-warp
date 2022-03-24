@@ -1,0 +1,107 @@
+#!/usr/bin/env sh
+
+
+    #               THIS SCRIPT CONFIGURES AND RUN ADN
+    #
+    #   USAGE: ./run_adn.sh [ run | genconf ] [ adn-arguments ] 
+    #   ./run_adn.sh -h for more informations
+    #
+    #   DESCRIPTION:
+    #   it's purpose is to allow some precises priviledged operations, without ever giving priviledges to the main program.
+    #   All the sensibles operations are contained to:
+    #
+    #       * before.sh and after.sh:
+    #           2 shells script generated during the configuration, and executed respectively before, and after the main program
+    #           they are needed to:
+    #               - configure the physical interface
+    #               - setting up routing and NAT for a server
+    #               - setting the SUID bit of the runtime programs (see below)
+    #
+    #       * runtime programs:
+    #           thoses allows ADN to execute root operation at runtime, without having the permission.
+    #           they are C programs, to be understood by most programmers, located in the directory scripts/runtime.
+    #           the source is generated during the configuration, and they are compiled by the script before.sh
+    #           the binary is owned by root, and has its SUID bit set: it allows any user to execute them with priviledges (without sudo!).
+    #           to limit the risks, those program are designed to have the most specific action as possible
+    #
+    #           in the current state, only one mode require runtime priviledges: the NAT client needs to configure the virtual interface
+    #           during the execution, when it receives an IP from a server. 
+    #
+    #       * launcher: c/main.c
+    #           this is needed to create virtual TUN interface, and retreive a file descriptor to it.
+    #           if needed, the current script compile and run the launcher with priviledges.
+    #           the launcher will (or at least should!):
+    #               - create the TUN interface
+    #               - execute before.hs with priviledges
+    #               - drop root: return to user execution (it takes the UID and GID of the user running this script)
+    #               - run ADN main program, without priviledges. A file descriptor to the TUN interface is given in argument.
+    #
+
+
+ACTION=$1                                   # Main action, can be "genconf" or "run"
+
+SCRIPT_PATH=./scripts/                      # path to the configurations scripts main directory
+ADN_EXE=${SCRIPT_PATH}adn-exe.sh            # ADN main program
+SCRIPT_RUNTIME=${SCRIPT_PATH}runtime/       # directory containing programs called at runtime by ADN. 
+SCRIPT_MODELS=${SCRIPT_PATH}models/         # directory containing models, to generate the runtime programs.
+SCRIPT_BEFORE=${SCRIPT_PATH}before.sh       # script executed with priviledges before the main program's execution
+SCRIPT_AFTER=${SCRIPT_PATH}after.sh         # script executed with priviledges after the main program's execution
+SCRIPT_TUN=${SCRIPT_PATH}tun_fd.txt         # File used to exchange file descriptor from C launcher to ADN main program
+
+shift
+args="$ACTION --script-path $SCRIPT_PATH --script-before $SCRIPT_BEFORE --script-after $SCRIPT_AFTER --script-tun $SCRIPT_TUN --script-runtime $SCRIPT_RUNTIME --script-models $SCRIPT_MODELS $@"
+
+TUN_KEYWORD=CREATE_TUN_IFACE                # if this keyword is present in the script before.sh, invoke ADN with the C launcher (compiled at runtime)
+C_LAUNCHER_SOURCE=c/launcher.c                  # source code of the C launcher
+C_LAUNCHER_BIN=./launcher                   # binary launcher
+C_COMPILER="gcc -Werror -Wall -Wextra -o"   # a compiler should not be forgiving
+
+
+case $ACTION in
+
+    genconf)        # GENERATING ADN CONFIGURATION
+
+                # If it exist, remove previously generated configurations files
+        [ -d $SCRIPT_RUNTIME ] && rm -rf $SCRIPT_RUNTIME  
+        [ -f $SCRIPT_BEFORE ] && rm $SCRIPT_BEFORE
+        [ -f $SCRIPT_AFTER ] && rm $SCRIPT_AFTER
+        [ -f $SCRIPT_TUN ] && rm $SCRIPT_TUN
+        mkdir $SCRIPT_RUNTIME
+
+                # Add the path to the configuration scripts to the program
+        $ADN_EXE $args      # Generate the configuration scripts from ADN parameters
+        chmod -R u+x $SCRIPT_PATH   # Set execution permission on the generated scripts
+        ;;
+
+
+    run)            # RUNNING ADN
+
+        if [ -f $SCRIPT_BEFORE ] ; then                             # the file before.sh exist, the program needs priviledges.
+
+
+            if [ -f $SCRIPT_TUN ]; then                             # TUN file exist: we need to use the C launcher
+                $C_COMPILER $C_LAUNCHER_BIN $C_LAUNCHER_SOURCE              # compiling the launcher
+                sudo -E $C_LAUNCHER_BIN $ADN_EXE $SCRIPT_BEFORE $SCRIPT_TUN $args   # Create a TUN interface, run before.sh, then run ADN without priviledges (don't trust me: check the source code!)
+            else                                                    # no TUN interface needed 
+                echo [ROOT] running script : $SCRIPT_BEFORE         # explaining to the user why we need the sudo
+                sudo $SCRIPT_BEFORE                                 # execute the script before.sh with priviledges
+                $ADN_EXE $args                                  # run ADN, without priviledges
+            fi
+
+
+        else        # if the script before.hs does not exist, ADN don't need priviledges.
+            $ADN_EXE $args     # simply run it as a user
+        fi
+
+        if [ -f $SCRIPT_AFTER ] ; then                  # if the script after.sh exist, ADN need priviledge to cleanup
+            echo [ROOT] running script : $SCRIPT_AFTER  # explaining to the user why we need the sudo
+            sudo $SCRIPT_AFTER                          # execute the script after.sh with priviledges
+        fi
+
+        ;;
+
+     *)
+        $ADN_EXE $args     # command invalid, display the help
+esac
+
+
