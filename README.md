@@ -13,7 +13,7 @@ We welcome gratefully any comment, reaction, question, suggestion or contributio
 ### Installation
 
 - clone this repository 
-> git clone repo.github.com TODO
+> git clone ""git@github.com:loltarudesh/adn-warp.git"
 - install the [haskell stack tool](https://docs.haskellstack.org/en/stable/README/)
 
 
