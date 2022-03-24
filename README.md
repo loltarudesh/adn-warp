@@ -103,12 +103,12 @@ This approach is also imposed by the diversity of possible applications, leading
 
 ### Done and tested (possibly still bugged, however...)
 
-* **[Core](adn-framework)**: a very simple framework designed to build network stack from independent modules and link them together, with naive implementation of logging, closing, CLI.
+* **[Core](wiki/adn-framework)**: a very simple framework designed to build network stack from independent modules and link them together, with naive implementation of logging, closing, CLI.
 * **Debug**: tools to debug a stack
 * **CLI**: not-so-rudimentary CLI, powered by [haskeline](https://hackage.haskell.org/package/haskeline)
 * **Tun**: this module creates a virtual TUN interface, and allows to route ADN communication through it.
 * **Link.UDP** open a simple UDP socket. Intended as a connection to a physical network (wifi-ibss and ethernet tested)
-* **[Warp](warp)**: a very naive implementation, of a very naive routing protocol. Intended as an example! Allows to send a packet over a given road, a registers roads of passing-by packets.
+* **[Warp](wiki/warp)**: a very naive implementation, of a very naive routing protocol. Intended as an example! Allows to send a packet over a given road, a registers roads of passing-by packets.
 * **Warp-search**: ask for a ressource in ADN, and retrieves road leading to it. 
 * **IP tunneling**: route internet traffic over ADN, to a server. Main feature of this release
 
