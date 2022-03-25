@@ -16,8 +16,8 @@ WARNING: this project is in a quite early stage. It has been very crudely tested
 
 - clone this repository 
 > git clone ""git@github.com:loltarudesh/adn-warp.git"
-- install the [haskell stack tool](https://docs.haskellstack.org/en/stable/README/)
-
+- if not present on your system, install the [haskell stack tool](https://docs.haskellstack.org/en/stable/README/)
+> curl -sSL https://get.haskellstack.org/ | sh
 
 ### Execution
 
