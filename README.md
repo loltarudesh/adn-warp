@@ -40,38 +40,25 @@ Below are a few simple usage example. However, we tried to make this program hig
 
 
 #### The gateway
-
-- generate the config:
 > ./run_adn.sh genconf link-UDP --wlan-iface wlan0 --phy-ip 10.10.0.1 --warp --server --gateway eth0
-
-- run the program:
+>
 > ./run_adn.sh run link-UDP --wlan-iface wlan0 --phy-ip 10.10.0.1 --warp --id 1 --server --gateway eth0
 
 #### The client
-
-- generate the config:
 > ./run_adn.sh genconf link-UDP --wlan-iface wlan0 --phy-ip 10.10.0.2 --warp --client
-
-- run the program:
-> ./run_adn.sh run link-UDP --wlan-iface wlan0 --phy-ip 10.10.0.2 --warp --id 1 --client
+>
+> ./run_adn.sh run link-UDP --wlan-iface wlan0 --phy-ip 10.10.0.2 --warp --id 2 --client
 
 #### The relay
-
-- generate the config:
 > ./run_adn.sh genconf link-UDP --wlan-iface wlan0 --phy-ip 10.10.0.3 --warp 
-
-- run the program:
+>
 > ./run_adn.sh run link-UDP --wlan-iface wlan0 --phy-ip 10.10.0.3 --warp --id 3
 
 
 #### Simulation
 
 You can also simulate a network with many user. This is quite useless, but allows you to check out the project, without having to type your password!
-
-No configuration needed, only:
 > ./run_adn.sh run test chain 
-
-if you've previously generated configuration, it will ask for a sudo. You only need to clear the configuration, with::
 > ./ run_adn.sh genconf test
 
 
