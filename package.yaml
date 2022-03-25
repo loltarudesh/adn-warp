@@ -1,7 +1,7 @@
 name:                adn
 version:             0.1.0.0
 github:              "loltarudesh/adn-warp"
-license:             BSD-3
+license:             BSD3
 author:              "Lorbam Oltarudesh"
 maintainer:          "lorbamOltarudesh@protonmail.com"
 copyright:           "2021 Lorbam Oltarudesh"
