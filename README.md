@@ -2,11 +2,13 @@
 
 ADN is a collection of libraries and tools designed to create free autonomous networks.
 
-documentation is available [here](TODO)
+The code documentation will soon be available on [hackage](https://hackage.haskell.org/)
 
-WARNING: this project is in a quite early stage. It has been very crudely tested, and should therefore be considered bugged, and used with caution.
+You can visit the [wiki](../../wiki/) for more information about the project: goals, current state, outlooks.
 
 We welcome gratefully any comment, reaction, question, suggestion or contribution to this project!
+
+WARNING: this project is in a quite early stage. It has been very crudely tested, and should therefore be considered bugged, and used with caution.
 
 ## Test the program
 
