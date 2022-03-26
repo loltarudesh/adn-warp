@@ -27,16 +27,6 @@ module Warp.Types (
 
   ) where
 
-import GHC.Generics
-import Data.Binary
-import Data.Tree
-import Control.Lens
-import ADN.Core
-import qualified Data.Map as M
-import Control.Concurrent.Suspend
-import ADN.Dispatcher
-
-import Data.Set
 import Warp.Types.Identifiers
 import Warp.Types.Graph
 import Warp.Types.Packets
@@ -46,6 +36,7 @@ import Warp.Types.States
 
 
 -- utils
+safeHead :: [a] -> Maybe a
 safeHead [] = Nothing
 safeHead l = Just $ head l
 

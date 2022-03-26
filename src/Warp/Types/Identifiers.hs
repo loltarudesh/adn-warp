@@ -21,15 +21,15 @@ newtype TTL = TTL Int -- TODO this is not an identifier...
 instance Binary TTL
 
 
--- | An identifier on the network
+-- | Identifier of a user on the network (only needs to be unique among neighbours)
 newtype WID= WID {getID :: Int}
     deriving (Generic, Eq, Ord)
 
--- | a unique identifier for the Ressource
+-- | a unique identifier for a Ressource
 newtype RID = RID Int
     deriving (Eq, Ord, Generic)
 
--- | a unique identifier for each service (internet, filetransfer...)
+-- | a unique identifier for each independent service registered on Warp
 newtype WProtocol = WProtocol Int
     deriving (Eq, Ord, Generic, Show)
 

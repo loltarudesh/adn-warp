@@ -22,8 +22,10 @@ import Warp.Routing
 import Warp.Relay
 
 
+-- | Dispatch incoming messages to the correct service, indentified by a 'WProtocol'
 type WarpDispatcher = Dispatcher WProtocol WarpMsg WarpMsg
 
+-- | Create a simple Warp, with only one service registered
 simpleWarp :: Warp -> WProtocol -> Pipe WarpPkt WarpMsg
 simpleWarp warp pID c = do
     wd <- warpDispatcher 
@@ -31,7 +33,9 @@ simpleWarp warp pID c = do
     pure c >>= pipe ws >>= pipeEnd wd
     pipeStart $ Protocol wd pID
 
-
+-- | implementation of the 'WarpDispatcher': 
+--
+-- it is not a simple 'byteDispatcher' because the 'WID' has to be transfered to the service, and is written before the 'WProtocol'.
 warpDispatcher :: ADN WarpDispatcher
 warpDispatcher = simpleDispatcher popID putID
     where
@@ -39,14 +43,15 @@ warpDispatcher = simpleDispatcher popID putID
         putID (WProtocol i) (WarpMsg uid p') = let p = writeWord8 i p' in WarpMsg uid p
 
 
-
+-- | Configuration structure for Warp
 data Warp = Warp {
-    myWarpID :: WID,        -- Warp identifier: should be unique among neighbours
-    initialTTL :: TTL,
-    edgeTimeout :: Int,         -- timeout delay for a graph edge.
-    myRessources :: [RID]
+    myWarpID :: WID,        -- ^ Warp identifier: should be unique among neighbours
+    initialTTL :: TTL,      -- ^ initial TTL (max hop count) for 'Research' packet
+    edgeTimeout :: Int,     -- ^ timeout delay for a graph edge.
+    myRessources :: [RID]   -- ^ list of ressources offered by the client (can be change at runtime through CLI)
 }
 
+-- | implementation of the Warp protocol
 instance PipeBuilder WarpState WarpPkt WarpMsg where
     pipe ws c = block "warp" $ makePipeState run onLowPacket onUpPacket c
         where run = addWarpCLI ws (send c) >> pure ws
@@ -79,8 +84,7 @@ onUpPacket ws toLow _ (WarpMsg dest pay) = do
 makeWarp :: Warp -> ADN WarpState
 makeWarp (Warp me max_ttl eto myRessources) = do
         rs <- RessourceState <$> newADNVar (S.fromList myRessources) <*> newADNVar M.empty
-        ws <- WarpState me max_ttl delay <$> newADNVar emptyGraph <*> pure rs
-        return ws
+        WarpState me max_ttl delay <$> newADNVar emptyGraph <*> pure rs
     where
         delay = sDelay $ toEnum eto
         emptyGraph = G $ M.singleton (V me) M.empty
@@ -95,7 +99,7 @@ addWarpCLI ws toLower = do
     addOrderCLI_ "sources" "shows the available sources" showSources
         where
             showGraph :: ADN String
-            showGraph = show <$> (readADNVar $ _graph ws)
+            showGraph = show <$> readADNVar (_graph ws)
                            
             addRoad :: String -> ADN String
             addRoad [] = pure "no path provided"

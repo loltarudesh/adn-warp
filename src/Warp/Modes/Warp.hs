@@ -37,7 +37,7 @@ makeWarpMode i m = run <$> parseModeParameter m (parseProtocol reader i)
 
 -- | helper to buid 'WarpMode', when not needing the WarpState
 simpleWarpMode :: WProtocol -> Mode (PipeEnd WarpMsg) -> WarpMode
-simpleWarpMode i m = (\m _ -> m) <$> dspOutput reader i m
+simpleWarpMode i m = const <$> dspOutput reader i m
     where reader = WProtocol <$> maybeReader readMaybe
 
 -- | Generate the LinkMode "warp" from a default 'Warp' configuration, and a list of 'WarpMode'.
@@ -61,15 +61,13 @@ parseWarp (DefaultWarp _ widM ttl timeout) = Warp
     <*> (TTL <$> option auto (long "max-ttl" <> metavar "TTL"  <> value ttl <> showDefault <> help "maximum number of hop for search packets"))
     <*> option auto (long "timeout" <> metavar "SECONDS"  <> value timeout <> showDefault <> help "maximum time of inactivity before an edge is removed from the network graph")
     <*> many (RID <$> option auto (long "ressources" <> short 'r' <> metavar "RID" <> help "ressources offered by this user" ))
-        where maybeDefaultWID = case widM of
-                    Nothing -> mempty
-                    Just wid -> value wid
+        where maybeDefaultWID = maybe mempty value widM
 
 -- | Relevant default parameters for 'Warp' 
 data DefaultWarp = DefaultWarp {
     warpLinkPID :: Int,               -- ^ protocol ID used on the link layer
-    warpID :: Maybe Int,
-    warpMaxTTL :: Int,
+    warpID :: Maybe Int,              -- ^ WID for this user
+    warpMaxTTL :: Int,                -- ^ initial TTL (max hop count) for 'SearckPkt' packet
     warpTimeout :: Int                -- ^ edge timeout in 'Warp'
 }
 
