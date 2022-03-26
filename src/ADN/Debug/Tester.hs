@@ -17,8 +17,8 @@ type ClientID = Int
 -- | TestClient represent a single ADN client: it consist of a pipeline used to process packets from other clients,
 -- and the list of clients in range.
 data TestClient = TestClient {
-    pipeline :: PipeEnd Payload,
-    neighs :: [ClientID]
+    tcPipeline :: PipeEnd Payload,
+    tcNeighs :: [ClientID]
 }
 
 

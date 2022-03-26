@@ -17,6 +17,7 @@ data DefaultTester = DefaultTester {
     dtWarpTimeout :: Int,
     dtProtocol :: WProtocol}
 
+tester :: DefaultTester -> ADNMode
 tester (DefaultTester nD ttl timeout pidD) =
         Mode "test" "simulate a network with many users" (pure []) parseTest
     where
