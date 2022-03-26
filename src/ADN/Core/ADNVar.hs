@@ -1,6 +1,9 @@
+-- | This module is a wrapper around "Control.Concurrent.MVar".
+--
+-- check the original documentation for more information about the function behaviour.
 module ADN.Core.ADNVar where
 
-import Control.Concurrent.MVar
+import Control.Concurrent.MVar (MVar, newMVar, readMVar, swapMVar, withMVar, modifyMVar_, modifyMVar)
 import Control.Monad.IO.Class
 
 import ADN.Core.Block

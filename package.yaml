@@ -8,6 +8,7 @@ copyright:           "2021 Lorbam Oltarudesh"
 
 extra-source-files:
 - README.md
+- ChangeLog.md
 
 # Metadata used when publishing your package
 synopsis: Another Distributed Network
@@ -20,7 +21,7 @@ description:         Please see the README on GitHub at <https://github.com/lolt
 
 dependencies:
 - base >= 4.7 && < 5
-- array 
+- array == 0.5.4.*
 - containers >= 0.6.4 && < 0.6.6
 - bytestring == 0.10.12.*
 - binary == 0.8.8.*
@@ -69,7 +70,6 @@ executables:
     - -Wincomplete-uni-patterns
     - -Wpartial-fields
     - -Wredundant-constraints
-    - -Werror
     dependencies:
     - adn
 

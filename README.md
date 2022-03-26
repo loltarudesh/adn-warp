@@ -4,7 +4,7 @@ ADN is a collection of libraries and tools designed to create free autonomous ne
 
 The code documentation will soon be available on [hackage](https://hackage.haskell.org/)
 
-You can visit the [wiki](../../wiki/) for more information about the project: goals, current state, outlooks.
+You can visit the [wiki](https://github.com/loltarudesh/adn-warp/wiki) for more information about the project: goals, current state, outlooks.
 
 We welcome gratefully any comment, reaction, question, suggestion or contribution to this project!
 
@@ -92,12 +92,12 @@ This approach is also imposed by the diversity of possible applications, leading
 
 ### Done and tested (possibly still bugged, however...)
 
-* **[Core](../../wiki/adn-framework)**: a very simple framework designed to build network stack from independent modules and link them together, with naive implementation of logging, closing, CLI.
+* **[Core](https://github.com/loltarudesh/adn-warp/wiki/adn-framework)**: a very simple framework designed to build network stack from independent modules and link them together, with naive implementation of logging, closing, CLI.
 * **Debug**: tools to debug a stack
 * **CLI**: not-so-rudimentary CLI, powered by [haskeline](https://hackage.haskell.org/package/haskeline)
 * **Tun**: this module creates a virtual TUN interface, and allows to route ADN communication through it.
 * **Link.UDP** open a simple UDP socket. Intended as a connection to a physical network (wifi-ibss and ethernet tested)
-* **[Warp](../../wiki/warp)**: a very naive implementation, of a very naive routing protocol. Intended as an example! Allows to send a packet over a given road, a registers roads of passing-by packets.
+* **[Warp](https://github.com/loltarudesh/adn-warp/wiki/warp)**: a very naive implementation, of a very naive routing protocol. Intended as an example! Allows to send a packet over a given road, a registers roads of passing-by packets.
 * **Warp-search**: ask for a ressource in ADN, and retrieves road leading to it. 
 * **IP tunneling**: route internet traffic over ADN, to a server. Main feature of this release
 
