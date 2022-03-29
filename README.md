@@ -8,9 +8,15 @@ You can visit the [wiki](https://github.com/loltarudesh/adn-warp/wiki) for more 
 
 We welcome gratefully any comment, reaction, question, suggestion or contribution to this project!
 
-WARNING: this project is in a quite early stage. It has been very crudely tested, and should therefore be considered bugged, and used with caution.
-
 ## Test the program
+
+DISCLAIMER: this is an Alpha release! Expect it to be bugged, and not fully functionnal.
+
+At this stage, only GNU/Linux system are supported. It has been sucessfully compiled and tested with:
+* Archlinux
+* Nixos
+
+Please let us know of any unsuccessful built or bug encountered, and any interesting test results you might have.
 
 ### Installation
 
